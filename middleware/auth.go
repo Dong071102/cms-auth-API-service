@@ -9,7 +9,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-var JwtSecret = []byte(os.Getenv("JWT_SECRET"))
+var jwtSecret = []byte(os.Getenv("JWT_SECRET"))
 
 func JWTAuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
@@ -21,7 +21,7 @@ func JWTAuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 		tokenString = strings.TrimPrefix(tokenString, "Bearer ")
 
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-			return JwtSecret, nil
+			return jwtSecret, nil
 		})
 
 		if err != nil || !token.Valid {

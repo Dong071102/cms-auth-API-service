@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"go-cms-backend/config"
 	"go-cms-backend/models"
 	"go-cms-backend/routes"
@@ -9,12 +10,13 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	echomiddleware "github.com/labstack/echo/v4/middleware"
-
 )
 
 func main() {
 	godotenv.Load()
+	fmt.Println("Loaded JWT_SECRET:", os.Getenv("JWT_SECRET"))
 	config.ConnectDB()
+
 
 	config.DB.AutoMigrate(
 		&models.User{},

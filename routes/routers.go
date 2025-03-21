@@ -6,6 +6,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 )
+
 func SetupRoutes(e *echo.Echo) {
 	e.GET("/health", func(c echo.Context) error {
 		return c.JSON(200, map[string]string{"message": "API is running ✅"})
@@ -33,4 +34,8 @@ func SetupRoutes(e *echo.Echo) {
 	e.GET("/lecturer-only", func(c echo.Context) error {
 		return c.JSON(200, map[string]string{"message": "Welcome, lecturer!"})
 	}, custommiddleware.JWTAuthMiddleware, custommiddleware.RoleMiddleware("lecturer"))
+	e.POST("/change-password", controllers.ChangePassword, custommiddleware.JWTAuthMiddleware)
+	e.POST("/forgot-password", controllers.ForgotPassword)
+	e.POST("/refresh-token", controllers.RefreshToken)
+
 }
