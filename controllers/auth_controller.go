@@ -209,3 +209,45 @@ func RefreshToken(c echo.Context) error {
 		"access_token": tokenStr,
 	})
 }
+func UpdateProfile(c echo.Context) error {
+	claimsRaw := c.Get("user")
+	claims, ok := claimsRaw.(jwt.MapClaims)
+	if !ok {
+		return c.JSON(http.StatusUnauthorized, map[string]string{"message": "Invalid token claims"})
+	}
+
+	userID, ok := claims["user_id"].(string)
+	if !ok {
+		return c.JSON(http.StatusUnauthorized, map[string]string{"message": "Invalid user ID in token"})
+	}
+
+	var input struct {
+		FirstName string `json:"first_name"`
+		LastName  string `json:"last_name"`
+		ImageURL  string `json:"image_url"`
+	}
+	if err := c.Bind(&input); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid request"})
+	}
+
+	var user models.User
+	if err := config.DB.First(&user, "user_id = ?", userID).Error; err != nil {
+		return c.JSON(http.StatusNotFound, map[string]string{"message": "User not found"})
+	}
+
+	if input.FirstName != "" {
+		user.FirstName = input.FirstName
+	}
+	if input.LastName != "" {
+		user.LastName = input.LastName
+	}
+	if input.ImageURL != "" {
+		user.ImageURL = input.ImageURL
+	}
+
+	if err := config.DB.Save(&user).Error; err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"message": "Failed to update profile"})
+	}
+
+	return c.JSON(http.StatusOK, map[string]string{"message": "Profile updated successfully"})
+}

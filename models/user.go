@@ -14,6 +14,7 @@ type User struct {
 	Email        string    `json:"email" gorm:"type:varchar(255);unique;not null"`
 	PasswordHash string    `json:"password_hash" gorm:"type:varchar(255);not null"`
 	Role         string    `json:"role" gorm:"type:varchar(50);not null"`
+	ImageURL     string    `json:"image_url" gorm:"type:varchar(255)"`
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
 }

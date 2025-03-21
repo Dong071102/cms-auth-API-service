@@ -37,5 +37,6 @@ func SetupRoutes(e *echo.Echo) {
 	e.POST("/change-password", controllers.ChangePassword, custommiddleware.JWTAuthMiddleware)
 	e.POST("/forgot-password", controllers.ForgotPassword)
 	e.POST("/refresh-token", controllers.RefreshToken)
+	e.PATCH("/update-profile", controllers.UpdateProfile, custommiddleware.JWTAuthMiddleware)
 
 }
