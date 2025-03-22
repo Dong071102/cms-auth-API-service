@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"fmt"
 	"go-cms-backend/controllers"
 	custommiddleware "go-cms-backend/middleware"
 
@@ -8,35 +9,36 @@ import (
 )
 
 func SetupRoutes(e *echo.Echo) {
-	e.GET("/health", func(c echo.Context) error {
+	e.GET("/auth/health", func(c echo.Context) error {
+		fmt.Println("🔥 Hit /health endpoint")
 		return c.JSON(200, map[string]string{"message": "API is running ✅"})
 	})
-	e.POST("/register", controllers.RegisterUser)
-	e.POST("/login", controllers.LoginUser)
+	e.POST("/auth/register", controllers.RegisterUser)
+	e.POST("/auth/login", controllers.LoginUser)
 
 	// Protected route example:
-	e.GET("/me", func(c echo.Context) error {
+	e.GET("/auth/me", func(c echo.Context) error {
 		claims := c.Get("user")
 		return c.JSON(200, map[string]any{"message": "You are authenticated", "claims": claims})
 	}, custommiddleware.JWTAuthMiddleware)
 
 	// Admin-only route example:
-	e.GET("/admin-only", func(c echo.Context) error {
+	e.GET("/auth/admin-only", func(c echo.Context) error {
 		return c.JSON(200, map[string]string{"message": "Welcome, admin!"})
 	}, custommiddleware.JWTAuthMiddleware, custommiddleware.RoleMiddleware("admin"))
 
 	// Student-only route example:
-	e.GET("/student-only", func(c echo.Context) error {
+	e.GET("/auth/student-only", func(c echo.Context) error {
 		return c.JSON(200, map[string]string{"message": "Welcome, student!"})
 	}, custommiddleware.JWTAuthMiddleware, custommiddleware.RoleMiddleware("student"))
 
 	// Lecturer-only route example:
-	e.GET("/lecturer-only", func(c echo.Context) error {
+	e.GET("/auth/lecturer-only", func(c echo.Context) error {
 		return c.JSON(200, map[string]string{"message": "Welcome, lecturer!"})
 	}, custommiddleware.JWTAuthMiddleware, custommiddleware.RoleMiddleware("lecturer"))
-	e.POST("/change-password", controllers.ChangePassword, custommiddleware.JWTAuthMiddleware)
-	e.POST("/forgot-password", controllers.ForgotPassword)
-	e.POST("/refresh-token", controllers.RefreshToken)
-	e.PATCH("/update-profile", controllers.UpdateProfile, custommiddleware.JWTAuthMiddleware)
+	e.POST("/auth/change-password", controllers.ChangePassword, custommiddleware.JWTAuthMiddleware)
+	e.POST("/auth/forgot-password", controllers.ForgotPassword)
+	e.POST("/auth/refresh-token", controllers.RefreshToken)
+	e.PATCH("/auth/update-profile", controllers.UpdateProfile, custommiddleware.JWTAuthMiddleware)
 
 }
