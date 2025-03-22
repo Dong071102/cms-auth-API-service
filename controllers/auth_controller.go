@@ -251,3 +251,38 @@ func UpdateProfile(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, map[string]string{"message": "Profile updated successfully"})
 }
+
+func GetCurrentUser(c echo.Context) error {
+	// Lấy claims từ JWT
+	claimsRaw := c.Get("user")
+	claims, ok := claimsRaw.(jwt.MapClaims)
+	if !ok {
+		return c.JSON(http.StatusUnauthorized, echo.Map{"message": "Invalid token claims"})
+	}
+
+	userIDStr, ok := claims["user_id"].(string)
+	if !ok {
+		return c.JSON(http.StatusUnauthorized, echo.Map{"message": "Invalid user ID in token"})
+	}
+
+	userUUID, err := uuid.Parse(userIDStr)
+	if err != nil {
+		return c.JSON(http.StatusUnauthorized, echo.Map{"message": "Invalid UUID format"})
+	}
+
+	var user models.User
+	if err := config.DB.First(&user, "user_id = ?", userUUID).Error; err != nil {
+		return c.JSON(http.StatusNotFound, echo.Map{"message": "User not found"})
+	}
+
+	// Trả thông tin user đã xác thực
+	return c.JSON(http.StatusOK, echo.Map{
+		"user_id":    user.UserID,
+		"username":   user.Username,
+		"first_name": user.FirstName,
+		"last_name":  user.LastName,
+		"email":      user.Email,
+		"role":       user.Role,
+		"image_url":  user.ImageURL,
+	})
+}

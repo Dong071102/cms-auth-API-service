@@ -17,11 +17,7 @@ func SetupRoutes(e *echo.Echo) {
 	e.POST("/auth/login", controllers.LoginUser)
 
 	// Protected route example:
-	e.GET("/auth/me", func(c echo.Context) error {
-		claims := c.Get("user")
-		return c.JSON(200, map[string]any{"message": "You are authenticated", "claims": claims})
-	}, custommiddleware.JWTAuthMiddleware)
-
+	e.GET("/auth/me", controllers.GetCurrentUser, custommiddleware.JWTAuthMiddleware)
 	// Admin-only route example:
 	e.GET("/auth/admin-only", func(c echo.Context) error {
 		return c.JSON(200, map[string]string{"message": "Welcome, admin!"})
