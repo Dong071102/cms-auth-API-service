@@ -2,8 +2,8 @@ package routes
 
 import (
 	"fmt"
-	"go-cms-backend/controllers"
-	custommiddleware "go-cms-backend/middleware"
+	"auth-cms-backend/controllers"
+	custommiddleware "auth-cms-backend/middleware"
 
 	"github.com/labstack/echo/v4"
 )

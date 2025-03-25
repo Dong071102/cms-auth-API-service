@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"go-cms-backend/config"
-	"go-cms-backend/models"
-	"go-cms-backend/routes"
+	"auth-cms-backend/config"
+	"auth-cms-backend/models"
+	"auth-cms-backend/routes"
 	"os"
 
 	"github.com/joho/godotenv"

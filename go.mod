@@ -1,4 +1,4 @@
-module go-cms-backend
+module auth-cms-backend
 
 go 1.23.0
 

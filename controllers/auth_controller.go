@@ -1,13 +1,13 @@
 package controllers
 
 import (
-	"go-cms-backend/config"
-	"go-cms-backend/models"
+	"auth-cms-backend/config"
+	"auth-cms-backend/models"
 	"net/http"
 	"os"
 	"time"
 
-	"go-cms-backend/utils"
+	"auth-cms-backend/utils"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"

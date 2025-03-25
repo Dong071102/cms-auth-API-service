@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"go-cms-backend/config"
-	"go-cms-backend/models"
+	"auth-cms-backend/config"
+	"auth-cms-backend/models"
 	"net/http"
 
 	"github.com/labstack/echo/v4"

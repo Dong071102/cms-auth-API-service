@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"go-cms-backend/models"
+	"auth-cms-backend/models"
 )
 
 var jwtSecret = []byte(os.Getenv("JWT_SECRET"))
