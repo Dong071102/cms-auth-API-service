@@ -65,8 +65,21 @@ func RegisterUser(c echo.Context) error {
 			FaceEmbedding: GenerateFakeEmbedding(512)}
 		config.DB.Create(&s)
 	case "lecturer":
-		l := models.Lecturer{LecturerID: user.UserID, LectainerCode: uuid.New().String()}
-		config.DB.Create(&l)
+		var lecturerCode string
+		for {
+			code := models.GenerateLecturerCode()
+			var count int64
+			config.DB.Model(&models.Lecturer{}).Where("lecturer_code = ?", code).Count(&count)
+			if count == 0 {
+				lecturerCode = code
+				break
+			}
+		}
+		s := models.Lecturer{
+			LecturerID:    user.UserID,
+			LecturerCode:  lecturerCode,
+			FaceEmbedding: GenerateFakeEmbedding(512)}
+		config.DB.Create(&s)
 	case "admin":
 		a := models.Admin{AdminID: user.UserID, AdminCode: uuid.New().String()}
 		config.DB.Create(&a)
@@ -277,12 +290,12 @@ func GetCurrentUser(c echo.Context) error {
 
 	// Trả thông tin user đã xác thực
 	return c.JSON(http.StatusOK, echo.Map{
-		"user_id":    user.UserID,
-		"username":   user.Username,
+		"user_id": user.UserID,
+		// "username":   user.Username,
 		"first_name": user.FirstName,
 		"last_name":  user.LastName,
-		"email":      user.Email,
-		"role":       user.Role,
-		"image_url":  user.ImageURL,
+		// "email":      user.Email,
+		// "role":       user.Role,
+		"image_url": user.ImageURL,
 	})
 }
