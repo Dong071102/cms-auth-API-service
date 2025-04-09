@@ -1,16 +1,16 @@
 package routes
 
 import (
-	"fmt"
 	"auth-cms-backend/controllers"
 	custommiddleware "auth-cms-backend/middleware"
+	"fmt"
 
 	"github.com/labstack/echo/v4"
 )
 
 func SetupRoutes(e *echo.Echo) {
 	e.GET("/auth/health", func(c echo.Context) error {
-		fmt.Println("🔥 Hit /health endpoint")
+		fmt.Println("Hit /health endpoint")
 		return c.JSON(200, map[string]string{"message": "API is running ✅"})
 	})
 	e.POST("/auth/register", controllers.RegisterUser)
