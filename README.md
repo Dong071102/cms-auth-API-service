@@ -101,6 +101,3 @@ Authorization: Bearer <access_token>
 
 ---
 
-## 📄 License
-
-MIT License
